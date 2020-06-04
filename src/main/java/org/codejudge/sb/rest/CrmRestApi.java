@@ -21,10 +21,10 @@ public class CrmRestApi {
 
 	@Autowired
 	CrmServiceImpl crmServiceImpl;
-	
+
 	private static final String LEADEMPT = "Lead id is empty";
 
-	@GetMapping(value = "/{leadId}", produces = "application/json")
+	@GetMapping(path = "/{leadId}", produces = "application/json")
 	public FetchLeadsResponse getDetailsByLeadId(@PathVariable Long leadId) {
 		if (Long.toString(leadId).isEmpty())
 			throw new RuntimeException(LEADEMPT);
@@ -36,14 +36,14 @@ public class CrmRestApi {
 		return crmServiceImpl.saveLeads(fetchLeadsRequest);
 	}
 
-	@PutMapping(value = "/{leadId}")
+	@PutMapping(path = "/{leadId}")
 	public SucessResponse updateByLeadId(@PathVariable Long leadId, @RequestBody LeadsRequest fetchLeadsRequest) {
 		if (Long.toString(leadId).isEmpty())
 			throw new RuntimeException(LEADEMPT);
 		return crmServiceImpl.updateLeads(fetchLeadsRequest, leadId);
 	}
 
-	@DeleteMapping(value = "{leadId}")
+	@DeleteMapping(path = "{leadId}")
 	public SucessResponse deleteByLeadId(@PathVariable Long leadId) {
 		if (Long.toString(leadId).isEmpty())
 			throw new RuntimeException(LEADEMPT);

@@ -18,7 +18,7 @@ public class CrmServiceImpl implements CrmLeadsService {
 
 	@Autowired
 	CrmLeadsRepo crmLeadsRepo;
-	
+
 	private static final String SUCC = "success";
 
 	@Override
@@ -37,6 +37,7 @@ public class CrmServiceImpl implements CrmLeadsService {
 		return saveLeadsResponse;
 	}
 
+	@Override
 	public FetchLeadsResponse findByLeadId(Long leadId) {
 		FetchLeadsResponse fetchLeadsResponse = new FetchLeadsResponse();
 		TbCrmLeads crmLeads = crmLeadsRepo.findOne(leadId);
@@ -49,6 +50,7 @@ public class CrmServiceImpl implements CrmLeadsService {
 		return fetchLeadsResponse;
 	}
 
+	@Override
 	public SucessResponse updateLeads(LeadsRequest updateLeadReq, long leadId) {
 		TbCrmLeads crmLead = crmLeadsRepo.findOne(leadId);
 		if (crmLead == null)
@@ -65,6 +67,7 @@ public class CrmServiceImpl implements CrmLeadsService {
 		return sucessResponse;
 	}
 
+	@Override
 	public SucessResponse removeLeads(Long leadId) {
 		crmLeadsRepo.delete(leadId);
 		SucessResponse response = new SucessResponse();
