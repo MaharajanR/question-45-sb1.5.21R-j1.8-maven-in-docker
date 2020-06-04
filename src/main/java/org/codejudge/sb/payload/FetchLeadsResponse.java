@@ -1,7 +1,6 @@
 package org.codejudge.sb.payload;
 
-import org.codejudge.sb.entity.Location_type;
-import org.codejudge.sb.entity.Status;
+import java.math.BigInteger;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -10,7 +9,7 @@ public class FetchLeadsResponse {
 	@JsonFormat(pattern = "")
 	private String first_name;
 	private String last_name;
-	private String mobile;
+	private BigInteger mobile;
 	private String email;
 	private String location_type;
 	private String location_string;
@@ -33,11 +32,11 @@ public class FetchLeadsResponse {
 		this.last_name = last_name;
 	}
 
-	public String getMobile() {
+	public BigInteger getMobile() {
 		return mobile;
 	}
 
-	public void setMobile(String mobile) {
+	public void setMobile(BigInteger mobile) {
 		this.mobile = mobile;
 	}
 
@@ -48,8 +47,6 @@ public class FetchLeadsResponse {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-
-	
 
 	public String getLocation_type() {
 		return location_type;

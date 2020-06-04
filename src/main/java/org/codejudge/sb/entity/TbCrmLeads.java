@@ -1,32 +1,36 @@
 package org.codejudge.sb.entity;
 
+import java.io.Serializable;
+import java.math.BigInteger;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.IdClass;
 import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
 
 @Entity
-@Table(name = "TB_CRM_LEADS", uniqueConstraints = { @UniqueConstraint(columnNames = { "email", "mobile" }) })
-@IdClass(TbCrmLeadsPk.class)
-public class TbCrmLeads {
+@Table(name = "TB_CRM_LEADS")
+public class TbCrmLeads implements Serializable {
+
+	private static final long serialVersionUID = -8452154167080030537L;
 
 	@Id
-	private Long id;
+	@GeneratedValue
+	private long id;
 
-	@Id
+	@Column(nullable = false, unique = true, length = 100)
 	private String email;
 
-	@Id
-	private long mobile;
+	@Column(nullable = false, unique = true, length = 10)
+	private BigInteger mobile;
 
-	@Column(nullable = false)
+	@Column(nullable = false, length = 50)
 	private String first_name;
 
-	@Column(nullable = false)
+	@Column(nullable = false, length = 50)
 	private String last_name;
 
 	@Column(nullable = false)
@@ -43,11 +47,11 @@ public class TbCrmLeads {
 	@Column(nullable = true)
 	private String communication;
 
-	public Long getId() {
+	public long getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 
@@ -59,11 +63,11 @@ public class TbCrmLeads {
 		this.email = email;
 	}
 
-	public long getMobile() {
+	public BigInteger getMobile() {
 		return mobile;
 	}
 
-	public void setMobile(long mobile) {
+	public void setMobile(BigInteger mobile) {
 		this.mobile = mobile;
 	}
 

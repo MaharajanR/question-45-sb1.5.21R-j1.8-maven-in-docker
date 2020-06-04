@@ -1,13 +1,15 @@
 package org.codejudge.sb.payload;
 
-import javax.validation.constraints.Size;
+import java.math.BigInteger;
+
+import org.hibernate.validator.constraints.Email;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import io.swagger.annotations.ApiModelProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = false)
-public class FetchLeadsRequest {
+public class LeadsRequest {
 
 	@ApiModelProperty(required = true)
 	private String first_name;
@@ -16,10 +18,10 @@ public class FetchLeadsRequest {
 	private String last_name;
 
 	@ApiModelProperty(required = true)
-	@Size(min = 10, max = 11)
-	private long mobile;
+	private BigInteger mobile;
 
 	@ApiModelProperty(required = true)
+	@Email
 	private String email;
 
 	@ApiModelProperty(required = true)
@@ -44,11 +46,11 @@ public class FetchLeadsRequest {
 		this.last_name = last_name;
 	}
 
-	public long getMobile() {
+	public BigInteger getMobile() {
 		return mobile;
 	}
 
-	public void setMobile(long mobile) {
+	public void setMobile(BigInteger mobile) {
 		this.mobile = mobile;
 	}
 

@@ -1,11 +1,8 @@
 package org.codejudge.sb.payload;
 
-import org.codejudge.sb.entity.Location_type;
-import org.codejudge.sb.entity.Status;
-
 public class SaveLeadsResponse {
 
-	private String id;
+	private long id;
 	private String first_name;
 	private String last_name;
 	private String mobile;
@@ -14,11 +11,11 @@ public class SaveLeadsResponse {
 	private String location_string;
 	private String status;
 
-	public String getId() {
+	public long getId() {
 		return id;
 	}
 
-	public void setId(String id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 
@@ -78,5 +75,4 @@ public class SaveLeadsResponse {
 		this.status = status;
 	}
 
-	
 }
