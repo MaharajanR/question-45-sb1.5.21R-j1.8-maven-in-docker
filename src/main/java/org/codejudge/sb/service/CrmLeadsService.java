@@ -1,9 +1,9 @@
 package org.codejudge.sb.service;
 
-import org.codejudge.sb.payload.Request.LeadsRequest;
-import org.codejudge.sb.payload.Response.FetchLeadsResponse;
-import org.codejudge.sb.payload.Response.SaveLeadsResponse;
-import org.codejudge.sb.payload.Response.SucessResponse;
+import org.codejudge.sb.payload.request.LeadsRequest;
+import org.codejudge.sb.payload.response.FetchLeadsResponse;
+import org.codejudge.sb.payload.response.SaveLeadsResponse;
+import org.codejudge.sb.payload.response.SucessResponse;
 
 
 public interface CrmLeadsService {

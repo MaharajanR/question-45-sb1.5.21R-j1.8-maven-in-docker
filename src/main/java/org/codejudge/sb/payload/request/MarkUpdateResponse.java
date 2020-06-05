@@ -1,4 +1,4 @@
-package org.codejudge.sb.payload.Request;
+package org.codejudge.sb.payload.request;
 
 public class MarkUpdateResponse {
 

@@ -1,5 +1,6 @@
 package org.codejudge.sb.exceptions;
 
+import org.codejudge.sb.payload.response.ErrorResponse;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,7 +12,8 @@ import org.springframework.web.context.request.WebRequest;
 public class AppExceptionHandler {
 
 	@ExceptionHandler(value = { ExceptionHandling.class })
-	public ResponseEntity<Object> handleCrmServiceException(ExceptionHandling ex, WebRequest request) {
-		return new ResponseEntity<>(ex.getMessage(), new HttpHeaders(), HttpStatus.BAD_REQUEST);
+	public ResponseEntity<ErrorResponse> handleCrmServiceException(ExceptionHandling ex, WebRequest request) {
+		ErrorResponse errorResponse = new ErrorResponse("failure", ex.getMessage());
+		return new ResponseEntity<>(errorResponse, new HttpHeaders(), HttpStatus.BAD_REQUEST);
 	}
 }

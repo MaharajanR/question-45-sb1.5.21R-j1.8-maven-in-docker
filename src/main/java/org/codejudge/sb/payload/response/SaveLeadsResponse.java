@@ -1,4 +1,4 @@
-package org.codejudge.sb.payload.Response;
+package org.codejudge.sb.payload.response;
 
 import java.math.BigInteger;
 

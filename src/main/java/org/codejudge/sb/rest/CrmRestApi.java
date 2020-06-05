@@ -2,10 +2,10 @@ package org.codejudge.sb.rest;
 
 import org.codejudge.sb.exceptions.ExceptionHandling;
 import org.codejudge.sb.impl.CrmServiceImpl;
-import org.codejudge.sb.payload.Request.LeadsRequest;
-import org.codejudge.sb.payload.Response.FetchLeadsResponse;
-import org.codejudge.sb.payload.Response.SaveLeadsResponse;
-import org.codejudge.sb.payload.Response.SucessResponse;
+import org.codejudge.sb.payload.request.LeadsRequest;
+import org.codejudge.sb.payload.response.FetchLeadsResponse;
+import org.codejudge.sb.payload.response.SaveLeadsResponse;
+import org.codejudge.sb.payload.response.SucessResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,8 +35,7 @@ public class CrmRestApi {
 	}
 
 	@PostMapping
-	public ResponseEntity<SaveLeadsResponse> fetchByLeadId(@RequestBody LeadsRequest fetchLeadsRequest)
-			throws Exception {
+	public ResponseEntity<SaveLeadsResponse> fetchByLeadId(@RequestBody LeadsRequest fetchLeadsRequest) {
 		SaveLeadsResponse saveLeadsResponse = crmServiceImpl.saveLeads(fetchLeadsRequest);
 		return new ResponseEntity<>(saveLeadsResponse, HttpStatus.CREATED);
 	}

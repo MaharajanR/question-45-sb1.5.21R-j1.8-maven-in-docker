@@ -1,34 +1,20 @@
-package org.codejudge.sb.payload.Request;
+package org.codejudge.sb.payload.response;
 
 import java.math.BigInteger;
 
-import org.hibernate.validator.constraints.Email;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+public class FetchLeadsResponse {
 
-import io.swagger.annotations.ApiModelProperty;
-
-@JsonIgnoreProperties(ignoreUnknown = false)
-public class LeadsRequest {
-
-	@ApiModelProperty(required = true)
+	@JsonFormat(pattern = "")
 	private String first_name;
-
-	@ApiModelProperty(required = true)
 	private String last_name;
-
-	@ApiModelProperty(required = true)
 	private BigInteger mobile;
-
-	@ApiModelProperty(required = true)
-	@Email
 	private String email;
-
-	@ApiModelProperty(required = true)
 	private String location_type;
-
-	@ApiModelProperty(required = true)
 	private String location_string;
+	private String status;
+	private String communication;
 
 	public String getFirst_name() {
 		return first_name;
@@ -76,6 +62,22 @@ public class LeadsRequest {
 
 	public void setLocation_string(String location_string) {
 		this.location_string = location_string;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	public String getCommunication() {
+		return communication;
+	}
+
+	public void setCommunication(String communication) {
+		this.communication = communication;
 	}
 
 }
