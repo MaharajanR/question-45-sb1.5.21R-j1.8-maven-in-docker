@@ -5,7 +5,6 @@ import org.codejudge.sb.payload.response.FetchLeadsResponse;
 import org.codejudge.sb.payload.response.SaveLeadsResponse;
 import org.codejudge.sb.payload.response.SucessResponse;
 
-
 public interface CrmLeadsService {
 
 	SaveLeadsResponse saveLeads(LeadsRequest fetchLeadsRequest);
@@ -14,6 +13,8 @@ public interface CrmLeadsService {
 
 	SucessResponse updateLeads(LeadsRequest updateLeadReq, long leadId);
 
-	SucessResponse removeLeads(Long leadId);
+	void removeLeads(Long leadId);
+
+	SucessResponse updateCommuniCationLeads(LeadsRequest updateLeadReq, long leadId);
 
 }

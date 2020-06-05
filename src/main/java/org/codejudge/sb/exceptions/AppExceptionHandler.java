@@ -11,8 +11,8 @@ import org.springframework.web.context.request.WebRequest;
 @ControllerAdvice
 public class AppExceptionHandler {
 
-	@ExceptionHandler(value = { ExceptionHandling.class })
-	public ResponseEntity<ErrorResponse> handleCrmServiceException(ExceptionHandling ex, WebRequest request) {
+	@ExceptionHandler(value = { Exception.class })
+	public ResponseEntity<ErrorResponse> handleCrmServiceException(Exception ex, WebRequest request) {
 		ErrorResponse errorResponse = new ErrorResponse("failure", ex.getMessage());
 		return new ResponseEntity<>(errorResponse, new HttpHeaders(), HttpStatus.BAD_REQUEST);
 	}

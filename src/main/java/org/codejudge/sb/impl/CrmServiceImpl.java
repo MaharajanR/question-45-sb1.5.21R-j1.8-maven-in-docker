@@ -4,6 +4,7 @@ import org.codejudge.sb.entity.Location_type;
 import org.codejudge.sb.entity.Status;
 import org.codejudge.sb.entity.TbCrmLeads;
 import org.codejudge.sb.exceptions.ExceptionHandling;
+import org.codejudge.sb.messageutil.Messages;
 import org.codejudge.sb.payload.request.LeadsRequest;
 import org.codejudge.sb.payload.response.FetchLeadsResponse;
 import org.codejudge.sb.payload.response.SaveLeadsResponse;
@@ -19,8 +20,6 @@ public class CrmServiceImpl implements CrmLeadsService {
 
 	@Autowired
 	CrmLeadsRepo crmLeadsRepo;
-
-	private static final String SUCC = "success";
 
 	@Override
 	public SaveLeadsResponse saveLeads(LeadsRequest fetchLeadsRequest) {
@@ -57,7 +56,7 @@ public class CrmServiceImpl implements CrmLeadsService {
 	public SucessResponse updateLeads(LeadsRequest updateLeadReq, long leadId) {
 		TbCrmLeads crmLead = crmLeadsRepo.findOne(leadId);
 		if (crmLead == null)
-			throw new ExceptionHandling("No Record found for the lead id.Please check and try again..");
+			throw new ExceptionHandling(Messages.NO_RCRD_FND.getMessage());
 		TbCrmLeads crmLeads = new TbCrmLeads();
 		BeanUtils.copyProperties(crmLead, crmLeads);
 		if (updateLeadReq.getEmail() != null) {
@@ -78,18 +77,51 @@ public class CrmServiceImpl implements CrmLeadsService {
 		if (updateLeadReq.getMobile() != null) {
 			crmLeads.setMobile(updateLeadReq.getMobile());
 		}
-		SucessResponse sucessResponse = new SucessResponse();
 		crmLeadsRepo.save(crmLeads);
-		sucessResponse.setStatus(crmLeadsRepo.save(crmLeads).getStatus().getValue());
-		return sucessResponse;
+		return new SucessResponse(Messages.SUCC.getMessage());
 	}
 
 	@Override
-	public SucessResponse removeLeads(Long leadId) {
+	public void removeLeads(Long leadId) {
+		TbCrmLeads crmLead = crmLeadsRepo.findOne(leadId);
+		if (crmLead == null)
+			throw new ExceptionHandling(Messages.NO_RCRD_FND.getMessage());
 		crmLeadsRepo.delete(leadId);
-		SucessResponse response = new SucessResponse();
-		response.setStatus(SUCC);
-		return response;
+	}
+
+	@Override
+	public SucessResponse updateCommuniCationLeads(LeadsRequest updateLeadReq, long leadId) {
+		TbCrmLeads crmLead = crmLeadsRepo.findOne(leadId);
+		if (crmLead == null)
+			throw new ExceptionHandling(Messages.NO_RCRD_FND.getMessage());
+		TbCrmLeads crmLeads = new TbCrmLeads();
+		BeanUtils.copyProperties(crmLead, crmLeads);
+		if (updateLeadReq.getEmail() != null) {
+			crmLeads.setEmail(updateLeadReq.getEmail());
+		}
+		if (updateLeadReq.getFirst_name() != null) {
+			crmLeads.setFirst_name(updateLeadReq.getFirst_name());
+		}
+		if (updateLeadReq.getLast_name() != null) {
+			crmLeads.setLast_name(updateLeadReq.getLast_name());
+		}
+		if (updateLeadReq.getLocation_string() != null) {
+			crmLeads.setLocation_string(updateLeadReq.getLocation_string());
+		}
+		if (updateLeadReq.getLocation_type() != null) {
+			crmLeads.setLocation_type(Location_type.valueOf(updateLeadReq.getLocation_type()));
+		}
+		if (updateLeadReq.getMobile() != null) {
+			crmLeads.setMobile(updateLeadReq.getMobile());
+		}
+		if (updateLeadReq.getCommunication() != null) {
+			crmLeads.setCommunication(updateLeadReq.getCommunication());
+		} else {
+			throw new ExceptionHandling("Communication detail is mandatory");
+		}
+		crmLeads.setStatus(Status.CO);
+		TbCrmLeads updatedCrmLead = crmLeadsRepo.save(crmLeads);
+		return new SucessResponse(Status.CO.getValue(), updatedCrmLead.getCommunication());
 	}
 
 }

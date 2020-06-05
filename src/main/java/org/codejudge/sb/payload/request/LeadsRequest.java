@@ -30,6 +30,9 @@ public class LeadsRequest {
 	@ApiModelProperty(required = true)
 	private String location_string;
 
+	@ApiModelProperty(required = true)
+	private String communication;
+
 	public String getFirst_name() {
 		return first_name;
 	}
@@ -76,6 +79,14 @@ public class LeadsRequest {
 
 	public void setLocation_string(String location_string) {
 		this.location_string = location_string;
+	}
+
+	public String getCommunication() {
+		return communication;
+	}
+
+	public void setCommunication(String communication) {
+		this.communication = communication;
 	}
 
 }

@@ -2,6 +2,7 @@ package org.codejudge.sb.rest;
 
 import org.codejudge.sb.exceptions.ExceptionHandling;
 import org.codejudge.sb.impl.CrmServiceImpl;
+import org.codejudge.sb.messageutil.Messages;
 import org.codejudge.sb.payload.request.LeadsRequest;
 import org.codejudge.sb.payload.response.FetchLeadsResponse;
 import org.codejudge.sb.payload.response.SaveLeadsResponse;
@@ -34,13 +35,13 @@ public class CrmRestApi {
 		return crmServiceImpl.findByLeadId(leadId);
 	}
 
-	@PostMapping(path = "/leads")
+	@PostMapping(path = "/leads", consumes = "application/json", produces = "application/json")
 	public ResponseEntity<SaveLeadsResponse> fetchByLeadId(@RequestBody LeadsRequest fetchLeadsRequest) {
 		SaveLeadsResponse saveLeadsResponse = crmServiceImpl.saveLeads(fetchLeadsRequest);
 		return new ResponseEntity<>(saveLeadsResponse, HttpStatus.CREATED);
 	}
 
-	@PutMapping(path = "/leads/{leadId}")
+	@PutMapping(path = "/leads/{leadId}", consumes = "application/json", produces = "application/json")
 	public ResponseEntity<SucessResponse> updateByLeadId(@PathVariable Long leadId,
 			@RequestBody LeadsRequest fetchLeadsRequest) {
 		if (Long.toString(leadId).isEmpty())
@@ -49,19 +50,20 @@ public class CrmRestApi {
 		return new ResponseEntity<>(sucessResponse, HttpStatus.ACCEPTED);
 	}
 
-	@PutMapping(path = "/leads/mark_lead/{leadId}")
+	@PutMapping(path = "/leads/mark_lead/{leadId}", consumes = "application/json", produces = "application/json")
 	public ResponseEntity<SucessResponse> updateMarkByLeadId(@PathVariable Long leadId,
 			@RequestBody LeadsRequest fetchLeadsRequest) {
 		if (Long.toString(leadId).isEmpty())
 			throw new ExceptionHandling(LEADEMPT);
-		SucessResponse sucessResponse = crmServiceImpl.updateLeads(fetchLeadsRequest, leadId);
+		SucessResponse sucessResponse = crmServiceImpl.updateCommuniCationLeads(fetchLeadsRequest, leadId);
 		return new ResponseEntity<>(sucessResponse, HttpStatus.ACCEPTED);
 	}
 
 	@DeleteMapping(path = "/leads/{leadId}")
-	public SucessResponse deleteByLeadId(@PathVariable Long leadId) {
+	public SucessResponse deleteByLeadId(@PathVariable Long leadId) throws ExceptionHandling {
 		if (Long.toString(leadId).isEmpty())
-			throw new RuntimeException(LEADEMPT);
-		return crmServiceImpl.removeLeads(leadId);
+			throw new ExceptionHandling(LEADEMPT);
+		crmServiceImpl.removeLeads(leadId);
+		return new SucessResponse(Messages.SUCC.getMessage());
 	}
 }
