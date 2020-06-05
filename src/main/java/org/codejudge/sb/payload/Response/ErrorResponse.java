@@ -1,10 +1,12 @@
-package org.codejudge.sb.payload;
+package org.codejudge.sb.payload.Response;
 
-public class ErrorResponse extends Exception {
+public class ErrorResponse {
 
-	private static final long serialVersionUID = 1128678242007093434L;
-	private final String status;
-	private final String reason;
+	private String status;
+	private String reason;
+
+	public ErrorResponse() {
+	}
 
 	public ErrorResponse(String status, String reason) {
 		this.status = status;

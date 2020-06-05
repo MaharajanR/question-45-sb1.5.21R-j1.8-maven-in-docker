@@ -3,10 +3,11 @@ package org.codejudge.sb.impl;
 import org.codejudge.sb.entity.Location_type;
 import org.codejudge.sb.entity.Status;
 import org.codejudge.sb.entity.TbCrmLeads;
-import org.codejudge.sb.payload.FetchLeadsResponse;
-import org.codejudge.sb.payload.LeadsRequest;
-import org.codejudge.sb.payload.SaveLeadsResponse;
-import org.codejudge.sb.payload.SucessResponse;
+import org.codejudge.sb.exceptions.ExceptionHandling;
+import org.codejudge.sb.payload.Request.LeadsRequest;
+import org.codejudge.sb.payload.Response.FetchLeadsResponse;
+import org.codejudge.sb.payload.Response.SaveLeadsResponse;
+import org.codejudge.sb.payload.Response.SucessResponse;
 import org.codejudge.sb.repository.CrmLeadsRepo;
 import org.codejudge.sb.service.CrmLeadsService;
 import org.springframework.beans.BeanUtils;
@@ -24,8 +25,10 @@ public class CrmServiceImpl implements CrmLeadsService {
 	@Override
 	public SaveLeadsResponse saveLeads(LeadsRequest fetchLeadsRequest) {
 		TbCrmLeads crmLeads = new TbCrmLeads();
-		if (crmLeadsRepo.findByEmail(fetchLeadsRequest.getEmail()) != null)
-			throw new RuntimeException("Email is already exists ,Please try another one");
+		if (crmLeadsRepo.findByEmail(fetchLeadsRequest.getEmail()) != null
+				|| crmLeadsRepo.findByMobile(fetchLeadsRequest.getMobile()) != null)
+			throw new ExceptionHandling("Email and Mobile is already exists ,Please try another one");
+
 		BeanUtils.copyProperties(fetchLeadsRequest, crmLeads);
 		crmLeads.setLocation_type(Location_type.valueOf(fetchLeadsRequest.getLocation_type()));
 		crmLeads.setStatus(Status.CR);
@@ -42,7 +45,7 @@ public class CrmServiceImpl implements CrmLeadsService {
 		FetchLeadsResponse fetchLeadsResponse = new FetchLeadsResponse();
 		TbCrmLeads crmLeads = crmLeadsRepo.findOne(leadId);
 		if (crmLeads == null)
-			throw new RuntimeException("No Record found for the lead id.");
+			throw new ExceptionHandling("Email and Mobile is already exists ,Please try another one");
 
 		BeanUtils.copyProperties(crmLeads, fetchLeadsResponse);
 		fetchLeadsResponse.setLocation_type(crmLeads.getLocation_type().getValue());
@@ -54,7 +57,7 @@ public class CrmServiceImpl implements CrmLeadsService {
 	public SucessResponse updateLeads(LeadsRequest updateLeadReq, long leadId) {
 		TbCrmLeads crmLead = crmLeadsRepo.findOne(leadId);
 		if (crmLead == null)
-			throw new RuntimeException("No Record found for the lead id.");
+			throw new ExceptionHandling("Email and Mobile is already exists ,Please try another one");
 
 		TbCrmLeads crmLeads = new TbCrmLeads();
 		BeanUtils.copyProperties(updateLeadReq, crmLeads);

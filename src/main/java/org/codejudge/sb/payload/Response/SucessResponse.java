@@ -1,4 +1,4 @@
-package org.codejudge.sb.payload;
+package org.codejudge.sb.payload.Response;
 
 public class SucessResponse {
 

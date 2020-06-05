@@ -1,6 +1,4 @@
-package org.codejudge.sb.payload;
-
-import org.codejudge.sb.entity.Status;
+package org.codejudge.sb.payload.Request;
 
 public class MarkUpdateResponse {
 
@@ -22,7 +20,5 @@ public class MarkUpdateResponse {
 	public void setStatus(String status) {
 		this.status = status;
 	}
-
-	
 
 }

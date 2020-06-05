@@ -1,11 +1,14 @@
 package org.codejudge.sb.rest;
 
+import org.codejudge.sb.exceptions.ExceptionHandling;
 import org.codejudge.sb.impl.CrmServiceImpl;
-import org.codejudge.sb.payload.FetchLeadsResponse;
-import org.codejudge.sb.payload.LeadsRequest;
-import org.codejudge.sb.payload.SaveLeadsResponse;
-import org.codejudge.sb.payload.SucessResponse;
+import org.codejudge.sb.payload.Request.LeadsRequest;
+import org.codejudge.sb.payload.Response.FetchLeadsResponse;
+import org.codejudge.sb.payload.Response.SaveLeadsResponse;
+import org.codejudge.sb.payload.Response.SucessResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,19 +30,21 @@ public class CrmRestApi {
 	@GetMapping(path = "/{leadId}", produces = "application/json")
 	public FetchLeadsResponse getDetailsByLeadId(@PathVariable Long leadId) {
 		if (Long.toString(leadId).isEmpty())
-			throw new RuntimeException(LEADEMPT);
+			throw new ExceptionHandling(LEADEMPT);
 		return crmServiceImpl.findByLeadId(leadId);
 	}
 
 	@PostMapping
-	public SaveLeadsResponse fetchByLeadId(@RequestBody LeadsRequest fetchLeadsRequest) {
-		return crmServiceImpl.saveLeads(fetchLeadsRequest);
+	public ResponseEntity<SaveLeadsResponse> fetchByLeadId(@RequestBody LeadsRequest fetchLeadsRequest)
+			throws Exception {
+		SaveLeadsResponse saveLeadsResponse = crmServiceImpl.saveLeads(fetchLeadsRequest);
+		return new ResponseEntity<>(saveLeadsResponse, HttpStatus.CREATED);
 	}
 
 	@PutMapping(path = "/{leadId}")
 	public SucessResponse updateByLeadId(@PathVariable Long leadId, @RequestBody LeadsRequest fetchLeadsRequest) {
 		if (Long.toString(leadId).isEmpty())
-			throw new RuntimeException(LEADEMPT);
+			throw new ExceptionHandling(LEADEMPT);
 		return crmServiceImpl.updateLeads(fetchLeadsRequest, leadId);
 	}
 

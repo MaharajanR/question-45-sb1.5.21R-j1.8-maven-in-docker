@@ -1,11 +1,13 @@
-package org.codejudge.sb.payload;
+package org.codejudge.sb.payload.Response;
+
+import java.math.BigInteger;
 
 public class SaveLeadsResponse {
 
 	private long id;
 	private String first_name;
 	private String last_name;
-	private String mobile;
+	private BigInteger mobile;
 	private String email;
 	private String location_type;
 	private String location_string;
@@ -35,11 +37,11 @@ public class SaveLeadsResponse {
 		this.last_name = last_name;
 	}
 
-	public String getMobile() {
+	public BigInteger getMobile() {
 		return mobile;
 	}
 
-	public void setMobile(String mobile) {
+	public void setMobile(BigInteger mobile) {
 		this.mobile = mobile;
 	}
 
