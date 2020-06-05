@@ -57,13 +57,27 @@ public class CrmServiceImpl implements CrmLeadsService {
 	public SucessResponse updateLeads(LeadsRequest updateLeadReq, long leadId) {
 		TbCrmLeads crmLead = crmLeadsRepo.findOne(leadId);
 		if (crmLead == null)
-			throw new ExceptionHandling("Email and Mobile is already exists ,Please try another one");
-
+			throw new ExceptionHandling("No Record found for the lead id.Please check and try again..");
 		TbCrmLeads crmLeads = new TbCrmLeads();
-		BeanUtils.copyProperties(updateLeadReq, crmLeads);
-		crmLeads.setId(leadId);
-		crmLeads.setLocation_type(Location_type.valueOf(updateLeadReq.getLocation_type()));
-		crmLeads.setStatus(crmLead.getStatus());
+		BeanUtils.copyProperties(crmLead, crmLeads);
+		if (updateLeadReq.getEmail() != null) {
+			crmLeads.setEmail(updateLeadReq.getEmail());
+		}
+		if (updateLeadReq.getFirst_name() != null) {
+			crmLeads.setFirst_name(updateLeadReq.getFirst_name());
+		}
+		if (updateLeadReq.getLast_name() != null) {
+			crmLeads.setLast_name(updateLeadReq.getLast_name());
+		}
+		if (updateLeadReq.getLocation_string() != null) {
+			crmLeads.setLocation_string(updateLeadReq.getLocation_string());
+		}
+		if (updateLeadReq.getLocation_type() != null) {
+			crmLeads.setLocation_type(Location_type.valueOf(updateLeadReq.getLocation_type()));
+		}
+		if (updateLeadReq.getMobile() != null) {
+			crmLeads.setMobile(updateLeadReq.getMobile());
+		}
 		SucessResponse sucessResponse = new SucessResponse();
 		crmLeadsRepo.save(crmLeads);
 		sucessResponse.setStatus(crmLeadsRepo.save(crmLeads).getStatus().getValue());

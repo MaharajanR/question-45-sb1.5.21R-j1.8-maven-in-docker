@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/leads")
+@RequestMapping("/api")
 public class CrmRestApi {
 
 	@Autowired
@@ -27,27 +27,38 @@ public class CrmRestApi {
 
 	private static final String LEADEMPT = "Lead id is empty";
 
-	@GetMapping(path = "/{leadId}", produces = "application/json")
+	@GetMapping(path = "/leads/{leadId}", produces = "application/json")
 	public FetchLeadsResponse getDetailsByLeadId(@PathVariable Long leadId) {
 		if (Long.toString(leadId).isEmpty())
 			throw new ExceptionHandling(LEADEMPT);
 		return crmServiceImpl.findByLeadId(leadId);
 	}
 
-	@PostMapping
+	@PostMapping(path = "/leads")
 	public ResponseEntity<SaveLeadsResponse> fetchByLeadId(@RequestBody LeadsRequest fetchLeadsRequest) {
 		SaveLeadsResponse saveLeadsResponse = crmServiceImpl.saveLeads(fetchLeadsRequest);
 		return new ResponseEntity<>(saveLeadsResponse, HttpStatus.CREATED);
 	}
 
-	@PutMapping(path = "/{leadId}")
-	public SucessResponse updateByLeadId(@PathVariable Long leadId, @RequestBody LeadsRequest fetchLeadsRequest) {
+	@PutMapping(path = "/leads/{leadId}")
+	public ResponseEntity<SucessResponse> updateByLeadId(@PathVariable Long leadId,
+			@RequestBody LeadsRequest fetchLeadsRequest) {
 		if (Long.toString(leadId).isEmpty())
 			throw new ExceptionHandling(LEADEMPT);
-		return crmServiceImpl.updateLeads(fetchLeadsRequest, leadId);
+		SucessResponse sucessResponse = crmServiceImpl.updateLeads(fetchLeadsRequest, leadId);
+		return new ResponseEntity<>(sucessResponse, HttpStatus.ACCEPTED);
 	}
 
-	@DeleteMapping(path = "{leadId}")
+	@PutMapping(path = "/leads/mark_lead/{leadId}")
+	public ResponseEntity<SucessResponse> updateMarkByLeadId(@PathVariable Long leadId,
+			@RequestBody LeadsRequest fetchLeadsRequest) {
+		if (Long.toString(leadId).isEmpty())
+			throw new ExceptionHandling(LEADEMPT);
+		SucessResponse sucessResponse = crmServiceImpl.updateLeads(fetchLeadsRequest, leadId);
+		return new ResponseEntity<>(sucessResponse, HttpStatus.ACCEPTED);
+	}
+
+	@DeleteMapping(path = "/leads/{leadId}")
 	public SucessResponse deleteByLeadId(@PathVariable Long leadId) {
 		if (Long.toString(leadId).isEmpty())
 			throw new RuntimeException(LEADEMPT);
