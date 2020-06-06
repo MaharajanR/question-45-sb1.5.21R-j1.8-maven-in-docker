@@ -3,7 +3,7 @@ package org.codejudge.sb.rest;
 import org.codejudge.sb.exceptions.ExceptionHandling;
 import org.codejudge.sb.impl.CrmServiceImpl;
 import org.codejudge.sb.messageutil.Messages;
-import org.codejudge.sb.payload.request.LeadsRequest;
+import org.codejudge.sb.payload.request.UserDto;
 import org.codejudge.sb.payload.response.FetchLeadsResponse;
 import org.codejudge.sb.payload.response.SaveLeadsResponse;
 import org.codejudge.sb.payload.response.SucessResponse;
@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/leads")
 public class CrmRestApi {
 
 	@Autowired
@@ -28,38 +28,29 @@ public class CrmRestApi {
 
 	private static final String LEADEMPT = "Lead id is empty";
 
-	@GetMapping(path = "/leads/{leadId}", produces = "application/json")
+	@GetMapping(path = "/{leadId}", produces = "application/json")
 	public FetchLeadsResponse getDetailsByLeadId(@PathVariable Long leadId) {
 		if (Long.toString(leadId).isEmpty())
 			throw new ExceptionHandling(LEADEMPT);
 		return crmServiceImpl.findByLeadId(leadId);
 	}
 
-	@PostMapping(path = "/leads", consumes = "application/json", produces = "application/json")
-	public ResponseEntity<SaveLeadsResponse> fetchByLeadId(@RequestBody LeadsRequest fetchLeadsRequest) {
+	@PostMapping(consumes = "application/json", produces = "application/json")
+	public ResponseEntity<SaveLeadsResponse> fetchByLeadId(@RequestBody UserDto fetchLeadsRequest) {
 		SaveLeadsResponse saveLeadsResponse = crmServiceImpl.saveLeads(fetchLeadsRequest);
 		return new ResponseEntity<>(saveLeadsResponse, HttpStatus.CREATED);
 	}
 
-	@PutMapping(path = "/leads/{leadId}", consumes = "application/json", produces = "application/json")
+	@PutMapping(path = "{leadId}", consumes = "application/json", produces = "application/json")
 	public ResponseEntity<SucessResponse> updateByLeadId(@PathVariable Long leadId,
-			@RequestBody LeadsRequest fetchLeadsRequest) {
+			@RequestBody UserDto fetchLeadsRequest) {
 		if (Long.toString(leadId).isEmpty())
 			throw new ExceptionHandling(LEADEMPT);
 		SucessResponse sucessResponse = crmServiceImpl.updateLeads(fetchLeadsRequest, leadId);
 		return new ResponseEntity<>(sucessResponse, HttpStatus.ACCEPTED);
 	}
 
-	@PutMapping(path = "/leads/mark_lead/{leadId}", consumes = "application/json", produces = "application/json")
-	public ResponseEntity<SucessResponse> updateMarkByLeadId(@PathVariable Long leadId,
-			@RequestBody LeadsRequest fetchLeadsRequest) {
-		if (Long.toString(leadId).isEmpty())
-			throw new ExceptionHandling(LEADEMPT);
-		SucessResponse sucessResponse = crmServiceImpl.updateCommuniCationLeads(fetchLeadsRequest, leadId);
-		return new ResponseEntity<>(sucessResponse, HttpStatus.ACCEPTED);
-	}
-
-	@DeleteMapping(path = "/leads/{leadId}")
+	@DeleteMapping(path = "{leadId}")
 	public SucessResponse deleteByLeadId(@PathVariable Long leadId) throws ExceptionHandling {
 		if (Long.toString(leadId).isEmpty())
 			throw new ExceptionHandling(LEADEMPT);
