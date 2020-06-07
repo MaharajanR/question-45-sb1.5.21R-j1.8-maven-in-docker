@@ -1,13 +1,12 @@
 package org.codejudge.sb.impl;
 
+import org.codejudge.sb.dto.UserDto;
 import org.codejudge.sb.entity.UserEntity;
 import org.codejudge.sb.exceptions.ExceptionHandling;
-import org.codejudge.sb.messageutil.Messages;
-import org.codejudge.sb.payload.request.UserDto;
+import org.codejudge.sb.messageutil.ErrorMessages;
 import org.codejudge.sb.payload.response.FetchLeadsResponse;
-import org.codejudge.sb.payload.response.SaveLeadsResponse;
 import org.codejudge.sb.payload.response.SucessResponse;
-import org.codejudge.sb.repository.CrmLeadsRepo;
+import org.codejudge.sb.repository.UserRepository;
 import org.codejudge.sb.service.UserService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,34 +14,35 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class CrmServiceImpl implements UserService {
 
 	@Autowired
-	CrmLeadsRepo crmLeadsRepo;
+	UserRepository userRepository;
 
 	@Autowired
 	BCryptPasswordEncoder bCryptPasswordEncoder;
 
 	@Override
-	public SaveLeadsResponse saveLeads(UserDto fetchLeadsRequest) {
-		UserEntity crmLeads = new UserEntity();
-		if (crmLeadsRepo.findByEmail(fetchLeadsRequest.getEmail()) != null)
-			throw new ExceptionHandling("Email and Mobile is already exists ,Please try another one");
-		BeanUtils.copyProperties(fetchLeadsRequest, crmLeads);
-		UserEntity crmLeadsSaved = crmLeadsRepo.save(crmLeads);
-		SaveLeadsResponse saveLeadsResponse = new SaveLeadsResponse();
-		BeanUtils.copyProperties(crmLeadsSaved, saveLeadsResponse);
-		return saveLeadsResponse;
+	public UserDto createUser(UserDto user) {
+		UserEntity userEntity = new UserEntity();
+		if (userRepository.findByEmail(user.getEmail()) != null)
+			throw new ExceptionHandling("Email is already exists ,Please try another one");
+		BeanUtils.copyProperties(user, userEntity);
+		UserEntity storedUserDetails = userRepository.save(userEntity);
+		UserDto returnValue = new UserDto();
+		BeanUtils.copyProperties(storedUserDetails, returnValue);
+		return returnValue;
 	}
 
 	@Override
-	public FetchLeadsResponse findByLeadId(Long leadId) {
+	public FetchLeadsResponse findById(Long leadId) {
 		FetchLeadsResponse fetchLeadsResponse = new FetchLeadsResponse();
-		UserEntity crmLeads = crmLeadsRepo.findOne(leadId);
+		UserEntity crmLeads = userRepository.findOne(leadId);
 		if (crmLeads == null)
-			throw new ExceptionHandling("Email and Mobile is already exists ,Please try another one");
+			throw new ExceptionHandling("Email is already exists ,Please try another one");
 
 		BeanUtils.copyProperties(crmLeads, fetchLeadsResponse);
 
@@ -50,22 +50,23 @@ public class CrmServiceImpl implements UserService {
 	}
 
 	@Override
-	public SucessResponse updateLeads(UserDto updateLeadReq, long leadId) {
-		UserEntity crmLead = crmLeadsRepo.findOne(leadId);
+	public SucessResponse updateCustomer(UserDto updateLeadReq, long leadId) {
+		UserEntity crmLead = userRepository.findOne(leadId);
 		if (crmLead == null)
-			throw new ExceptionHandling(Messages.NO_RCRD_FND.getMessage());
+			throw new ExceptionHandling(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
 		UserEntity crmLeads = new UserEntity();
 		BeanUtils.copyProperties(crmLead, crmLeads);
-		crmLeadsRepo.save(crmLeads);
-		return new SucessResponse(Messages.SUCC.getMessage());
+		userRepository.save(crmLeads);
+		return new SucessResponse("success");
 	}
 
+	@Transactional
 	@Override
 	public void removeLeads(Long leadId) {
-		UserEntity crmLead = crmLeadsRepo.findOne(leadId);
+		UserEntity crmLead = userRepository.findOne(leadId);
 		if (crmLead == null)
-			throw new ExceptionHandling(Messages.NO_RCRD_FND.getMessage());
-		crmLeadsRepo.delete(leadId);
+			throw new ExceptionHandling(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
+		userRepository.delete(leadId);
 	}
 
 	@Override

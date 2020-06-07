@@ -1,8 +1,8 @@
-package org.codejudge.sb.payload.response;
+package org.codejudge.sb.dto;
 
 import java.math.BigInteger;
 
-public class SaveLeadsResponse {
+public class UserDto {
 
 	private long id;
 	private String first_name;

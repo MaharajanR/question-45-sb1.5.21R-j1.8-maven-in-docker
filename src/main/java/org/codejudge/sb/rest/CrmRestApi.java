@@ -2,10 +2,10 @@ package org.codejudge.sb.rest;
 
 import org.codejudge.sb.exceptions.ExceptionHandling;
 import org.codejudge.sb.impl.CrmServiceImpl;
-import org.codejudge.sb.messageutil.Messages;
+import org.codejudge.sb.messageutil.ErrorMessages;
 import org.codejudge.sb.payload.request.UserDto;
 import org.codejudge.sb.payload.response.FetchLeadsResponse;
-import org.codejudge.sb.payload.response.SaveLeadsResponse;
+import org.codejudge.sb.payload.response.UserDto;
 import org.codejudge.sb.payload.response.SucessResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -32,12 +32,12 @@ public class CrmRestApi {
 	public FetchLeadsResponse getDetailsByLeadId(@PathVariable Long leadId) {
 		if (Long.toString(leadId).isEmpty())
 			throw new ExceptionHandling(LEADEMPT);
-		return crmServiceImpl.findByLeadId(leadId);
+		return crmServiceImpl.findById(leadId);
 	}
 
 	@PostMapping(consumes = "application/json", produces = "application/json")
-	public ResponseEntity<SaveLeadsResponse> fetchByLeadId(@RequestBody UserDto fetchLeadsRequest) {
-		SaveLeadsResponse saveLeadsResponse = crmServiceImpl.saveLeads(fetchLeadsRequest);
+	public ResponseEntity<UserDto> fetchByLeadId(@RequestBody UserDto fetchLeadsRequest) {
+		UserDto saveLeadsResponse = crmServiceImpl.createUser(fetchLeadsRequest);
 		return new ResponseEntity<>(saveLeadsResponse, HttpStatus.CREATED);
 	}
 
@@ -46,7 +46,7 @@ public class CrmRestApi {
 			@RequestBody UserDto fetchLeadsRequest) {
 		if (Long.toString(leadId).isEmpty())
 			throw new ExceptionHandling(LEADEMPT);
-		SucessResponse sucessResponse = crmServiceImpl.updateLeads(fetchLeadsRequest, leadId);
+		SucessResponse sucessResponse = crmServiceImpl.updateCustomer(fetchLeadsRequest, leadId);
 		return new ResponseEntity<>(sucessResponse, HttpStatus.ACCEPTED);
 	}
 
@@ -55,6 +55,6 @@ public class CrmRestApi {
 		if (Long.toString(leadId).isEmpty())
 			throw new ExceptionHandling(LEADEMPT);
 		crmServiceImpl.removeLeads(leadId);
-		return new SucessResponse(Messages.SUCC.getMessage());
+		return new SucessResponse(ErrorMessages.SUCC.getMessage());
 	}
 }
