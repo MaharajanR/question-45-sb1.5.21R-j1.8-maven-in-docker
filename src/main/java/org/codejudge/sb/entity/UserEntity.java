@@ -6,10 +6,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.Table;
 
-@Entity
-@Table(name = "TB_CRM_LEADS")
+@Entity(name = "users")
 public class UserEntity implements Serializable {
 
 	private static final long serialVersionUID = -8452154167080030537L;

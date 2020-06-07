@@ -1,15 +1,17 @@
 package org.codejudge.sb.impl;
 
+import java.util.ArrayList;
+
 import org.codejudge.sb.dto.UserDto;
 import org.codejudge.sb.entity.UserEntity;
 import org.codejudge.sb.exceptions.ExceptionHandling;
 import org.codejudge.sb.messageutil.ErrorMessages;
-import org.codejudge.sb.payload.response.FetchLeadsResponse;
-import org.codejudge.sb.payload.response.SucessResponse;
 import org.codejudge.sb.repository.UserRepository;
 import org.codejudge.sb.service.UserService;
+import org.codejudge.sb.utils.Utils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -17,10 +19,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-public class CrmServiceImpl implements UserService {
+public class UserServiceImpl implements UserService {
 
 	@Autowired
 	UserRepository userRepository;
+
+	@Autowired
+	Utils utils;
 
 	@Autowired
 	BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -29,8 +34,11 @@ public class CrmServiceImpl implements UserService {
 	public UserDto createUser(UserDto user) {
 		UserEntity userEntity = new UserEntity();
 		if (userRepository.findByEmail(user.getEmail()) != null)
-			throw new ExceptionHandling("Email is already exists ,Please try another one");
+			throw new ExceptionHandling(ErrorMessages.RECORD_ALREADY_EXISTS.getErrorMessage());
 		BeanUtils.copyProperties(user, userEntity);
+		String publicUserId = utils.generateUserId(30);
+		userEntity.setUserId(publicUserId);
+		userEntity.setEncryptedPassword(bCryptPasswordEncoder.encode(user.getPassword()));
 		UserEntity storedUserDetails = userRepository.save(userEntity);
 		UserDto returnValue = new UserDto();
 		BeanUtils.copyProperties(storedUserDetails, returnValue);
@@ -38,40 +46,27 @@ public class CrmServiceImpl implements UserService {
 	}
 
 	@Override
-	public FetchLeadsResponse findById(Long leadId) {
-		FetchLeadsResponse fetchLeadsResponse = new FetchLeadsResponse();
-		UserEntity crmLeads = userRepository.findOne(leadId);
-		if (crmLeads == null)
-			throw new ExceptionHandling("Email is already exists ,Please try another one");
-
-		BeanUtils.copyProperties(crmLeads, fetchLeadsResponse);
-
-		return fetchLeadsResponse;
-	}
-
-	@Override
-	public SucessResponse updateCustomer(UserDto updateLeadReq, long leadId) {
-		UserEntity crmLead = userRepository.findOne(leadId);
-		if (crmLead == null)
-			throw new ExceptionHandling(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
-		UserEntity crmLeads = new UserEntity();
-		BeanUtils.copyProperties(crmLead, crmLeads);
-		userRepository.save(crmLeads);
-		return new SucessResponse("success");
+	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+		UserEntity userEntity = userRepository.findByEmail(email);
+		if (userEntity == null)
+			throw new UsernameNotFoundException(email);
+		return new User(userEntity.getEmail(), userEntity.getEncryptedPassword(), new ArrayList<>());
 	}
 
 	@Transactional
 	@Override
 	public void removeLeads(Long leadId) {
-		UserEntity crmLead = userRepository.findOne(leadId);
-		if (crmLead == null)
-			throw new ExceptionHandling(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
 		userRepository.delete(leadId);
+
 	}
 
-	@Override
-	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		return null;
+	public UserDto findByUserId(String userId) {
+		UserEntity userEntity = userRepository.findByUserId(userId);
+		if (userEntity == null)
+			throw new ExceptionHandling(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
+		UserDto returnValue = new UserDto();
+		BeanUtils.copyProperties(userEntity, returnValue);
+		return returnValue;
 	}
 
 }

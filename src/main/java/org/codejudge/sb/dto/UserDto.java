@@ -1,17 +1,25 @@
 package org.codejudge.sb.dto;
 
-import java.math.BigInteger;
+import java.io.Serializable;
 
-public class UserDto {
+public class UserDto implements Serializable {
 
+	private static final long serialVersionUID = -8401049332169111643L;
 	private long id;
-	private String first_name;
-	private String last_name;
-	private BigInteger mobile;
+	private String userId;
+	private String firstName;
+	private String lastName;
 	private String email;
-	private String location_type;
-	private String location_string;
-	private String status;
+	private String password;
+	private String encryptedPassword;
+
+	public String getUserId() {
+		return userId;
+	}
+
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
 
 	public long getId() {
 		return id;
@@ -21,28 +29,20 @@ public class UserDto {
 		this.id = id;
 	}
 
-	public String getFirst_name() {
-		return first_name;
+	public String getFirstName() {
+		return firstName;
 	}
 
-	public void setFirst_name(String first_name) {
-		this.first_name = first_name;
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
 	}
 
-	public String getLast_name() {
-		return last_name;
+	public String getLastName() {
+		return lastName;
 	}
 
-	public void setLast_name(String last_name) {
-		this.last_name = last_name;
-	}
-
-	public BigInteger getMobile() {
-		return mobile;
-	}
-
-	public void setMobile(BigInteger mobile) {
-		this.mobile = mobile;
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
 	}
 
 	public String getEmail() {
@@ -53,28 +53,20 @@ public class UserDto {
 		this.email = email;
 	}
 
-	public String getLocation_type() {
-		return location_type;
+	public String getPassword() {
+		return password;
 	}
 
-	public void setLocation_type(String location_type) {
-		this.location_type = location_type;
+	public void setPassword(String password) {
+		this.password = password;
 	}
 
-	public String getLocation_string() {
-		return location_string;
+	public String getEncryptedPassword() {
+		return encryptedPassword;
 	}
 
-	public void setLocation_string(String location_string) {
-		this.location_string = location_string;
-	}
-
-	public String getStatus() {
-		return status;
-	}
-
-	public void setStatus(String status) {
-		this.status = status;
+	public void setEncryptedPassword(String encryptedPassword) {
+		this.encryptedPassword = encryptedPassword;
 	}
 
 }

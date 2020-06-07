@@ -1,6 +1,6 @@
 package org.codejudge.sb.payload.request;
 
-public class UserLoginRequest {
+public class UserLoginRequestModel {
 	private String email;
 	private String password;
 
